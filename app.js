@@ -1,7 +1,5 @@
 // import Counter from './component/counter'
 
-const players = []
-
 const Header = (props) => {
     return (
         <header>
@@ -15,6 +13,7 @@ const Player = (props) => {
     return (
         <div className="player">
             <span className="player-name">
+            <button className="remove-player" onClick={() => props.removePlayer(props.id) }>X</button>
                 {props.name}
             </span>
             <Counter />
@@ -76,16 +75,27 @@ class App extends React.Component {
               }
         ]
     }
+
+    handleRemovePlayer = (id) => {
+        this.setState( prevState => {
+            return {
+                players: prevState.players.filter( p => p.id !== id)
+            }
+        })
+    }
     render(){
         return (
             <div className="scoreboard">
-                <Header title="Scoreboard" totalPlayers={this.state.players.length}/>
+                <Header title="Scoreboard" 
+                totalPlayers={this.state.players.length}/>
 
                 {/* Player list */}
                 {this.state.players.map(player => 
                     <Player 
                         name={player.name}
+                        id={player.id}
                         key={player.id.toString()}
+                        removePlayer={this.handleRemovePlayer}
                     />
                 )}
             </div>
@@ -94,6 +104,6 @@ class App extends React.Component {
 }
 
 ReactDOM.render(
-    <App initialPlayers={players} />,
+    <App />,
     document.getElementById('root')
 );
